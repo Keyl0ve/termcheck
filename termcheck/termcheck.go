@@ -32,32 +32,36 @@ func run(pass *analysis.Pass) (any, error) {
 		switch n := n.(type) {
 		case *ast.SelectorExpr:
 			// user.Read などのフィールドやメソッドを参照する式
-			getSelectorName(pass, n)
+			leftName, rightName, ok := getSelectorName(pass, n)
+			if !ok {
+				return
+			}
+
+			if isContainsDuplicate(leftName, rightName) {
+				return
+			}
+			pass.Reportf(n.Pos(), "word is used multiple in same line")
 		}
 	})
 
 	return nil, nil
 }
 
-func getSelectorName(pass *analysis.Pass, selectorExpr *ast.SelectorExpr) {
+func getSelectorName(pass *analysis.Pass, selectorExpr *ast.SelectorExpr) (string, string, bool) {
 	// selector の左の名前を取得する ->  X
 	leftExpr := selectorExpr.X
 	leftIdent, ok := leftExpr.(*ast.Ident)
 	if !ok || len(leftIdent.Name) == 0 {
-		return
+		return "", "", false
 	}
 
 	// selector の右の名前を取得する ->  Sel
 	rightIdentName := selectorExpr.Sel.Name
 	if len(rightIdentName) == 0 {
-		return
+		return "", "", false
 	}
 
-	// 同じ term が使われているかどうかを判断する
-	if ok := isContainsDuplicate(leftIdent.Name, rightIdentName); !ok {
-		return
-	}
-	pass.Reportf(selectorExpr.Pos(), "word is used multiple in same line")
+	return leftIdent.Name, rightIdentName, true
 }
 
 func isContainsDuplicate(leftName, rightName string) bool {
