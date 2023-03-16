@@ -16,12 +16,12 @@ func checkCallFunction() {
 	uu.ReadUserFromJapan() // OK
 
 	uuu.ReadUser()          // OK
-	UUU.ReadUserFromJapan() //OK
+	uuu.ReadUserFromJapan() //OK
 }
 
 type User struct {
 	userName string
-	age      string
+	age      int
 }
 
 // 構造体の term check
@@ -31,12 +31,12 @@ func (u User) a() {
 	u.age = 10         // OK
 }
 
-func (uu User) a() {
+func (uu User) b() {
 	uu.userName = "aaa" // OK
 	uu.age = 10         // OK
 }
 
 // Bad
-func (user User) b() {
+func (user User) c() {
 	user.userName = "aaa" // want "word is used multiple in same line"
 }
