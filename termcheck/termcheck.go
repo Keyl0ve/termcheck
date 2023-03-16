@@ -32,7 +32,6 @@ func run(pass *analysis.Pass) (any, error) {
 		switch n := n.(type) {
 		case *ast.SelectorExpr:
 			// user.Read などのフィールドやメソッドを参照する式
-			// pass.Reportf(n.Pos(), "identifier is gopher")
 			getSelectorName(pass, n)
 		}
 	})
@@ -41,11 +40,8 @@ func run(pass *analysis.Pass) (any, error) {
 }
 
 func getSelectorName(pass *analysis.Pass, selectorExpr *ast.SelectorExpr) {
-	// fmt.Println(selectorExpr)
 	// selector の左の名前を取得する ->  X
 	leftExpr := selectorExpr.X
-
-	// もし左側の式が Identifier だった場合は、その名前を使います
 	leftIdent, ok := leftExpr.(*ast.Ident)
 	if !ok || len(leftIdent.Name) == 0 {
 		return
@@ -56,8 +52,6 @@ func getSelectorName(pass *analysis.Pass, selectorExpr *ast.SelectorExpr) {
 	if len(rightIdentName) == 0 {
 		return
 	}
-
-	// もし左側の式が Identifier だった場合は、その名前を使います
 
 	// 同じ term が使われているかどうかを判断する
 	if ok := isContainsDuplicate(leftIdent.Name, rightIdentName); !ok {
@@ -75,12 +69,8 @@ func isContainsDuplicate(leftName, rightName string) bool {
 	leftStr := strings.ToLower(leftName)
 	rightStr := strings.ToLower(rightName)
 
-	return hasDuplicate(leftStr, rightStr)
-}
-
-func hasDuplicate(left, right string) bool {
-	for _, l := range left {
-		if strings.ContainsRune(right, l) {
+	for _, l := range leftStr {
+		if strings.ContainsRune(rightStr, l) {
 			return true
 		}
 	}
