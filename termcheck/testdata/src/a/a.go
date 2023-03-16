@@ -4,19 +4,26 @@ import (
 	"user"
 	uu "user"
 	uuu "user"
+	uuuu "user"
 )
 
 // パッケージと関数の term check
 func checkCallFunction() {
-	// Bad
+	user.Read()              // OK
 	user.ReadUser()          // want "word is used multiple in same line"
 	user.ReadUserFromJapan() // want "word is used multiple in same line"
-	// Good
+
+	uu.Read()              // OK
 	uu.ReadUser()          // OK
 	uu.ReadUserFromJapan() // OK
 
+	uuu.Read()              // OK
 	uuu.ReadUser()          // OK
-	uuu.ReadUserFromJapan() //OK
+	uuu.ReadUserFromJapan() // OK
+
+	uuuu.Read()              // OK
+	uuuu.ReadUser()          // OK
+	uuuu.ReadUserFromJapan() // OK
 }
 
 type User struct {
@@ -25,7 +32,6 @@ type User struct {
 }
 
 // 構造体の term check
-// Good
 func (u User) a() {
 	u.userName = "aaa" // OK
 	u.age = 10         // OK
@@ -36,7 +42,16 @@ func (uu User) b() {
 	uu.age = 10         // OK
 }
 
-// Bad
-func (user User) c() {
+func (uuu User) c() {
+	uuu.userName = "aaa" // OK
+	uuu.age = 10         // OK
+}
+
+func (uuuu User) d() {
+	uuuu.userName = "aaa" // OK
+	uuuu.age = 10         // OK
+}
+
+func (user User) e() {
 	user.userName = "aaa" // want "word is used multiple in same line"
 }
