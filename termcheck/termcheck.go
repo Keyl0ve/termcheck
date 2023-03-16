@@ -66,7 +66,7 @@ func getSelectorName(pass *analysis.Pass, selectorExpr *ast.SelectorExpr) (strin
 }
 
 func isContainsDuplicate(leftName, rightName string) bool {
-	// 左の文字数が 1,2, 3 の時はスキップする
+	// 左の文字数が 1,2,3 の時はスキップする
 	if len(leftName) < 3 {
 		return false
 	}
