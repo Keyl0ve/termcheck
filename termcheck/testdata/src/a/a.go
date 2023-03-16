@@ -10,8 +10,8 @@ import (
 // パッケージと関数の term check
 func checkCallFunction() {
 	user.Read()              // OK
-	user.ReadUser()          // want "word is used multiple in same line"
-	user.ReadUserFromJapan() // want "word is used multiple in same line"
+	user.ReadUser()          // want "user is used multiple in same line"
+	user.ReadUserFromJapan() // want "user is used multiple in same line"
 
 	uu.Read()              // OK
 	uu.ReadUser()          // OK
@@ -53,5 +53,5 @@ func (uuuu User) d() {
 }
 
 func (user User) e() {
-	user.userName = "aaa" // want "word is used multiple in same line"
+	user.userName = "aaa" // want "user is used multiple in same line"
 }

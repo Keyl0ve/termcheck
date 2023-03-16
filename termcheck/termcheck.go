@@ -41,7 +41,7 @@ func run(pass *analysis.Pass) (any, error) {
 			if !isContainsDuplicate(leftName, rightName) {
 				return
 			}
-			pass.Reportf(n.Pos(), "word is used multiple in same line")
+			pass.Reportf(n.Pos(), "%s is used multiple in same line", leftName)
 		}
 	})
 
