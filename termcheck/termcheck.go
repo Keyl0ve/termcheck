@@ -66,11 +66,12 @@ func getSelectorName(pass *analysis.Pass, selectorExpr *ast.SelectorExpr) (strin
 }
 
 func isContainsDuplicate(leftName, rightName string) bool {
-	// 左の文字が 1,2 の時はスキップする
+	// 左の文字数が 1,2 の時はスキップする
 	if len(leftName) == 1 || len(leftName) == 2 {
 		return false
 	}
 
+	// ReadUserFromJapan -> read_user_from_japan
 	targetStr := strcase.ToSnake(rightName)
 	return strings.Contains(targetStr, leftName)
 }
