@@ -4,6 +4,7 @@ import (
 	"go/ast"
 	"strings"
 
+	"github.com/iancoleman/strcase"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/inspector"
@@ -37,7 +38,7 @@ func run(pass *analysis.Pass) (any, error) {
 				return
 			}
 
-			if isContainsDuplicate(leftName, rightName) {
+			if !isContainsDuplicate(leftName, rightName) {
 				return
 			}
 			pass.Reportf(n.Pos(), "word is used multiple in same line")
@@ -66,17 +67,10 @@ func getSelectorName(pass *analysis.Pass, selectorExpr *ast.SelectorExpr) (strin
 
 func isContainsDuplicate(leftName, rightName string) bool {
 	// 左の文字が 1,2 の時はスキップする
-	// TODO:
 	if len(leftName) == 1 || len(leftName) == 2 {
 		return false
 	}
-	leftStr := strings.ToLower(leftName)
-	rightStr := strings.ToLower(rightName)
 
-	for _, l := range leftStr {
-		if strings.ContainsRune(rightStr, l) {
-			return true
-		}
-	}
-	return false
+	targetStr := strcase.ToSnake(rightName)
+	return strings.Contains(targetStr, leftName)
 }
