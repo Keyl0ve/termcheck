@@ -29,17 +29,31 @@ func checkCallFunction() {
 type User struct {
 	userName string
 	age      int
+	country  Country
+}
+
+type Country struct {
+	address    string
+	userNumber string
+	userFriend Friend
+}
+
+type Friend struct {
+	userNum int
 }
 
 // 構造体の term check
 func (u User) a() {
 	u.userName = "aaa" // OK
 	u.age = 10         // OK
+	u.country.address = "sss"
+	u.country.userNumber = "aaa"
 }
 
 func (uu User) b() {
-	uu.userName = "aaa" // OK
-	uu.age = 10         // OK
+	uu.userName = "aaa"                // OK
+	uu.age = 10                        // OK
+	uu.country.userFriend.userNum = 10 // want "user is used multiple in same line"
 }
 
 func (uuu User) c() {
@@ -53,5 +67,7 @@ func (uuuu User) d() {
 }
 
 func (user User) e() {
-	user.userName = "aaa" // want "user is used multiple in same line"
+	user.userName = "aaa"           // want "user is used multiple in same line"
+	user.country.userNumber = "aaa" // want "user is used multiple in same line"
+	// user.country.address = "aaa"    // OK
 }

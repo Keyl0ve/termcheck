@@ -1,6 +1,7 @@
 package termcheck
 
 import (
+	"fmt"
 	"go/ast"
 	"strings"
 
@@ -33,45 +34,73 @@ func run(pass *analysis.Pass) (any, error) {
 		switch n := n.(type) {
 		case *ast.SelectorExpr:
 			// user.Read などのフィールドやメソッドを参照する式
-			leftName, rightName, ok := getSelectorName(pass, n)
+			rowSlice := appendName(n)
+			nameSlice := splitName(rowSlice)
+
+			str, ok := isContainsDuplicate(nameSlice)
 			if !ok {
 				return
 			}
-
-			if !isContainsDuplicate(leftName, rightName) {
-				return
-			}
-			pass.Reportf(n.Pos(), "%s is used multiple in same line", leftName)
+			pass.Reportf(n.Pos(), "%s is used multiple in same line", str)
 		}
 	})
 
 	return nil, nil
 }
 
-func getSelectorName(pass *analysis.Pass, selectorExpr *ast.SelectorExpr) (string, string, bool) {
-	// selector の左の名前を取得する ->  X
-	leftExpr := selectorExpr.X
-	leftIdent, ok := leftExpr.(*ast.Ident)
-	if !ok || len(leftIdent.Name) == 0 {
-		return "", "", false
+func appendName(selectorExpr *ast.SelectorExpr) []string {
+	res := []string{}
+
+	if leftIdent, ok := selectorExpr.X.(*ast.Ident); ok {
+		res = append(res, leftIdent.Name)
+	} else if selector, ok := selectorExpr.X.(*ast.SelectorExpr); ok {
+		res = appendName(selector)
+	} else {
+		panic("unexpected selector")
 	}
 
-	// selector の右の名前を取得する ->  Sel
-	rightIdentName := selectorExpr.Sel.Name
-	if len(rightIdentName) == 0 {
-		return "", "", false
-	}
+	res = append(res, selectorExpr.Sel.Name)
 
-	return leftIdent.Name, rightIdentName, true
+	return res
 }
 
-func isContainsDuplicate(leftName, rightName string) bool {
-	// 左の文字数が 1,2,3 の時はスキップする
-	if len(leftName) < 3 {
-		return false
+func splitName(nameSlice []string) []string {
+	strSlice := []string{}
+	for _, name := range nameSlice {
+		// ReadUserFromJapan -> read_user_from_japan
+		snakedStr := strcase.ToSnake(name)
+		// read_user_from_japan -> [read, user, from, japan]
+		targetStr := strings.Split(snakedStr, "_")
+
+		for _, v := range targetStr {
+			strSlice = append(strSlice, v)
+		}
 	}
 
-	// ReadUserFromJapan -> read_user_from_japan
-	targetStr := strcase.ToSnake(rightName)
-	return strings.Contains(targetStr, leftName)
+	fmt.Println(strSlice)
+
+	return strSlice
+}
+
+func isContainsDuplicate(strSlice []string) (string, bool) {
+	// 要素数が1以下の場合は、重複する要素がないので即座にfalseを返します。
+	if len(strSlice) < 2 {
+		return "", false
+	}
+
+	encountered := map[string]bool{}
+
+	for _, str := range strSlice {
+		// u, uu など3文字未満の文字の場合 continue
+		if len(str) < 3 {
+			continue
+		}
+		if encountered[str] {
+			return str, true
+		} else {
+			encountered[str] = true
+		}
+	}
+
+	return "", false
 }
