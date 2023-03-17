@@ -50,3 +50,8 @@ go install github.com/Keyl0ve/termcheck
 go vet -vettool=$(which termcheck) ./...
 ```
 
+### ref
+- https://pkg.go.dev/golang.org/x/tools/go/analysis
+- https://pkg.go.dev/golang.org/x/tools/go/ast/inspector
+- https://pkg.go.dev/github.com/iancoleman/strcase@v0.2.0
+- https://pkg.go.dev/strings
