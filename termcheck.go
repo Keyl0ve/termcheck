@@ -59,7 +59,6 @@ func appendName(selectorExpr *ast.SelectorExpr) []string {
 	}
 
 	res = append(res, selectorExpr.Sel.Name)
-
 	return res
 }
 

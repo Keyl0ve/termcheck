@@ -1,6 +1,8 @@
 package user
 
-func ReadUser()
+func ReadUser(str string) string {
+	return str
+}
 
 func readUser()
 

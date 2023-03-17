@@ -1,6 +1,7 @@
 package a
 
 import (
+	"fmt"
 	"user"
 	uu "user"
 	uuu "user"
@@ -9,20 +10,18 @@ import (
 
 // パッケージと関数の term check
 func checkCallFunction() {
-	user.Read()              // OK
-	user.ReadUser()          // want "user is used multiple in same line"
+	user.Read()                 // OK
+	aaa := user.ReadUser("aaa") // want "user is used multiple in same line"
+	fmt.Println(aaa)
 	user.ReadUserFromJapan() // want "user is used multiple in same line"
 
 	uu.Read()              // OK
-	uu.ReadUser()          // OK
 	uu.ReadUserFromJapan() // OK
 
 	uuu.Read()              // OK
-	uuu.ReadUser()          // OK
 	uuu.ReadUserFromJapan() // OK
 
 	uuuu.Read()              // OK
-	uuuu.ReadUser()          // OK
 	uuuu.ReadUserFromJapan() // OK
 }
 
@@ -67,7 +66,7 @@ func (uuuu User) d() {
 }
 
 func (user User) e() {
-	user.userName = "John"         // want "user is used multiple in same line"
-	user.country.myNumber = 1234   // want "user is used multiple in same line"
-	user.country.address = "Japan" // OK
+	user.userName = "John"          // want "user is used multiple in same line"
+	user.country.userNumber = "aaa" // want "user is used multiple in same line"
+	user.country.address = "Japan"  // OK
 }
