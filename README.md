@@ -4,7 +4,7 @@ termcheck is the linter to check using simple term
 ## 概要
 ↓の時に同じ単語を使っていたら警告を出す linter です。
 - パッケージ名 . 関数名
-- レシーバー . フィールド名
+- 構造体 . フィールド名
 
 ## Example
 
