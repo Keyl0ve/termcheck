@@ -1,7 +1,6 @@
 package termcheck
 
 import (
-	"fmt"
 	"go/ast"
 	"strings"
 
@@ -76,8 +75,6 @@ func splitName(nameSlice []string) []string {
 			strSlice = append(strSlice, v)
 		}
 	}
-
-	fmt.Println(strSlice)
 
 	return strSlice
 }
