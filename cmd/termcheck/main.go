@@ -1,7 +1,7 @@
 package main
 
 import (
-	"termcheck"
+	"github.com/Keyl0ve/termcheck"
 
 	"golang.org/x/tools/go/analysis/unitchecker"
 )
