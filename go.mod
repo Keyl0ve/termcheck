@@ -9,8 +9,6 @@ require (
 )
 
 require (
-	github.com/Keyl0ve/termcheck v0.0.0-20230316135332-427348f63873 // indirect
-	github.com/gostaticanalysis/dupimport v0.0.0-20190626051117-37d4ab484168 // indirect
 	github.com/hashicorp/go-version v1.2.1 // indirect
 	github.com/otiai10/copy v1.2.0 // indirect
 	github.com/tenntenn/modver v1.0.1 // indirect
