@@ -35,7 +35,7 @@ func (u User) a() {
 
 func (user User) a() {
 	user.userName = "John"         // want "user is used multiple in same line"
-	user.country.myNumber = 1234   // want "user is used multiple in same line"
+	user.country.myNumber = 1234   // OK
 	user.country.address = "Japan" // OK
 }
 ```
