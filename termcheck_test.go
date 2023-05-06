@@ -3,8 +3,7 @@ package termcheck_test
 import (
 	"testing"
 
-	"termcheck"
-
+	"github.com/Keyl0ve/termcheck"
 	"github.com/gostaticanalysis/testutil"
 	"golang.org/x/tools/go/analysis/analysistest"
 )
